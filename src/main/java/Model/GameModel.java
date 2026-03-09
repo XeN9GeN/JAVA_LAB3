@@ -5,18 +5,17 @@ import java.util.Random;
 import javax.swing.*;
 
 public class GameModel {
-    private TetrominoClass cur_tetromino;
     private TetrominoClass next_tetromino;
-    private BoardClass board;
-
-    private GameState state;
-    private int score;
+    private TetrominoClass cur_tetromino;
     private HighScore high_score;
     private ScoreCalc score_calc;
+    private BoardClass board;
+    private GameState state;
     private Random random;
+
     private static final String[] TETROMINO_TYPES = {"I", "O", "L", "S", "Z", "J", "T"};
     public static boolean f=false;
-
+    private int score;
 
     //Constructors
     public GameModel() {
