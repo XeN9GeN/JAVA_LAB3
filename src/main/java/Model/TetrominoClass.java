@@ -15,6 +15,7 @@ public  class TetrominoClass {
         this.type=t;
     }
 
+
     public int getX() {
         return this.x;
     }
@@ -30,9 +31,12 @@ public  class TetrominoClass {
     public int[][] getTetromino() {
         return tetromino;
     }
+
+
     public void setTetromino(int[][] tetromino) {
         this.tetromino = tetromino;
     }
+
 
     public void move(int dx, int dy) {
         this.x += dx;
@@ -55,6 +59,7 @@ public  class TetrominoClass {
         }
         return rotated;
     }
+
 
     //3 обёртки
     public boolean canMove(BoardClass b,int dx, int dy){

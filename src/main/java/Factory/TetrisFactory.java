@@ -4,7 +4,10 @@ public class TetrisFactory {
     public static TetrominoClass create(String type){
         return switch (type){
             case "I" -> new TetrominoClass(new int[][] {
-                    {1,1,1,1}
+                    {0,0,0,0},
+                    {1,1,1,1},
+                    {0,0,0,0},
+                    {0,0,0,0}
             }, 1,"I");
             case "O" -> new TetrominoClass(new int [][]{
                     {1,1},
