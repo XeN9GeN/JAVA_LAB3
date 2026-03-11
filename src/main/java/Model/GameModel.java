@@ -114,7 +114,13 @@ public class GameModel {
     public TetrominoClass getCurTetromino(){
         return cur_tetromino;
     }
+    public TetrominoClass getNextTetromino() {
+        return next_tetromino;
+    }
     public BoardClass getBoard(){
         return board;
+    }
+    public int getScore() {
+        return score;
     }
 }
