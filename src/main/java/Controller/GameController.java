@@ -1,23 +1,30 @@
 package Controller;
 import Model.*;
 import View.GamePanel;
+import View.InfoPanel;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class GameController{
     private GameModel model;
     private GamePanel view;
+    private InfoPanel panel;
     private Timer timer;//javax.swing
 
-    public GameController(GameModel m, GamePanel v){
+    public GameController(GameModel m, GamePanel v, InfoPanel i){
         this.model=m;
         this.view=v;
+        this.panel=i;
 
-        JFrame frame = new JFrame("Tetris");//окно, фрейм под swing
+        JFrame frame = new JFrame("Tetris");
+        JPanel main_panel = new JPanel(new BorderLayout());
+        main_panel.add(view,BorderLayout.CENTER);//читать описание, поле в центре
+        main_panel.add(panel,BorderLayout.EAST);
 
-        //configuration
-        frame.add(view);//добавляет компоненту в конец Container(класс с компонентами)List в ContentPane посредством перегруженного
+        frame.add(main_panel);//добавляет компоненту в конец Container(класс с компонентами)List в ContentPane посредством перегруженного
         //в JFrame метода addImpl и перенаправления компоненты туда
         frame.pack();//както автоматически задаёт размер окна?
         frame.setLocationRelativeTo(null);
@@ -29,6 +36,7 @@ public class GameController{
         timer=new Timer(600,e -> {
             model.gameTick();
             view.repaint();
+            panel.repaint();
         });
         timer.start();
     }
