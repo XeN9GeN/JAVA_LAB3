@@ -8,7 +8,7 @@ public class Main {
         SwingUtilities.invokeLater(()->{
             GameModel gm = new GameModel();
             GamePanel gp= new GamePanel(gm);
-            //asdsd
+            //asdsdas
             GameController gc = new GameController(gm,gp);
         });
     }
