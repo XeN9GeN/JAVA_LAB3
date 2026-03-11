@@ -12,7 +12,7 @@ public class InfoPanel extends JPanel{
 
     public InfoPanel(GameModel m){
         this.mod=m;
-        setPreferredSize(new Dimension(150, BoardClass.HEIGHT * 30));
+        setPreferredSize(new Dimension(250, BoardClass.HEIGHT * 30));
         setBackground(Color.GRAY);
     }
 
@@ -26,7 +26,6 @@ public class InfoPanel extends JPanel{
         gr2.drawString("SCORE", 20, 50);
         gr2.drawString(String.valueOf(mod.getScore()), 20, 70);
 
-        // Next piece preview
         gr2.drawString("NEXT", 20, 150);
         drawNextPiece(gr2, 20, 170);
     }
