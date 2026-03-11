@@ -17,7 +17,7 @@ public class GamePanel extends JPanel{
     //Graphics
     //paintComponent(Gr)
     @Override
-    protected void paintComponent(Graphics gr){
+    protected void paintComponent(Graphics gr){//все упавшие
         super.paintComponent(gr);
         int[][] b = model.getBoard().getBoard();
 
@@ -33,9 +33,9 @@ public class GamePanel extends JPanel{
                 gr.drawRect(x * CELL, y * CELL, CELL, CELL);
             }
         }
-        drawCurTet(gr);
+        drawCurTet(gr);//падающая поверх доски
     }
-    private void drawCurTet(Graphics gr){
+    private void drawCurTet(Graphics gr){//отрисовка падающей
         TetrominoClass t = model.getCurTetromino();
         int[][] sh=t.getTetromino();
 
