@@ -33,6 +33,7 @@ public class GamePanel extends JPanel{
                 gr.drawRect(x * CELL, y * CELL, CELL, CELL);
             }
         }
+        drawCurTet(gr);
     }
     private void drawCurTet(Graphics gr){
         TetrominoClass t = model.getCurTetromino();
@@ -41,8 +42,8 @@ public class GamePanel extends JPanel{
         for(int i=0;i<sh.length;i++){
             for(int j=0;j<sh[i].length;j++){
                 if(sh[i][j]!=0){
-                    int x =(this.getX()+i)*CELL;//смещение под фигуру
-                    int y =(this.getY()+j)*CELL;
+                    int x =(t.getX()+j)*CELL;//смещение под фигуру
+                    int y =(t.getY()+i)*CELL;
                     gr.setColor(getColor(t.getColor()));
                     gr.fillRect(x,y,CELL,CELL);
                 }

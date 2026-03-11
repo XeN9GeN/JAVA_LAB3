@@ -26,7 +26,7 @@ public class GameController{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//иначе просто скроет, не закроет
         setup(frame);
 
-        timer=new Timer(500,e -> {
+        timer=new Timer(600,e -> {
             model.gameTick();
             view.repaint();
         });

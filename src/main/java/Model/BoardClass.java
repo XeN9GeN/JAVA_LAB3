@@ -24,6 +24,7 @@ public class BoardClass {
 
     public boolean boardCanPlaceTet(int[][] tetromino, int corner_X, int corner_Y) {
     //corner_X имеется ввиду x коорда левого вверхнего угла
+        int[][]r = tetromino;
         for (int i = 0; i < tetromino.length; i++) {
             for (int j = 0; j < tetromino[i].length; j++) {
                 if (tetromino[i][j] != 0) {

@@ -14,7 +14,6 @@ public class GameModel {
     private Random random;
 
     private static final String[] TETROMINO_TYPES = {"I", "O", "L", "S", "Z", "J", "T"};
-    public static boolean f=false;
     private int score;
 
     //Constructors
@@ -34,12 +33,12 @@ public class GameModel {
 
 
     //Tetromino Actions
-    public void moveCurTet(int dx, int dy) {
+    public synchronized void moveCurTet(int dx, int dy) {
         if (state == GameState.PLAY && cur_tetromino.canMove(board, dx, dy)) {
             cur_tetromino.move(dx, dy);
         }
     }
-    public void rotateCurTet() {
+    public synchronized void rotateCurTet() {
         if (state == GameState.PLAY && cur_tetromino.canRotate(board)) {
             cur_tetromino.rotateTet(board);
         }
@@ -54,7 +53,7 @@ public class GameModel {
 
 
     //Game Actions
-    public void spawnNewTet() {
+    public synchronized void spawnNewTet() {
         if (next_tetromino == null) {
             next_tetromino = createRandomPiece();
             cur_tetromino = createRandomPiece();
@@ -76,8 +75,8 @@ public class GameModel {
             reset();
         }
     }
-    public void gameTick() {
-        if(state==GameState.PLAY) return;
+    public synchronized void gameTick() {
+        if(state!=GameState.PLAY) return;
 
         if(cur_tetromino==null){
             spawnNewTet();
@@ -101,7 +100,7 @@ public class GameModel {
             if(state==GameState.END) gameOver();
         }
     }
-    private void reset(){
+    private synchronized void reset(){
         board= new BoardClass();
         state=GameState.PLAY;
         score=0;
