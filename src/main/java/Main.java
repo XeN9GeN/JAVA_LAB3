@@ -1,6 +1,8 @@
 import Controller.GameController;
 import View.GamePanel;
 import Model.*;
+import View.InfoPanel;
+
 import javax.swing.*;
 
 public class Main {
@@ -8,8 +10,8 @@ public class Main {
         SwingUtilities.invokeLater(()->{
             GameModel gm = new GameModel();
             GamePanel gp= new GamePanel(gm);
-            //random commit com
-            GameController gc = new GameController(gm,gp);
+            InfoPanel ip = new InfoPanel(gm);
+            GameController gc = new GameController(gm,gp,ip);
         });
     }
 }
