@@ -28,8 +28,10 @@ public class InfoPanel extends JPanel{
 
         gr2.drawString("NEXT", 20, 150);
         drawNextPiece(gr2, 20, 170);
-    }
 
+        gr2.drawString("HIGH SCORE", 100, 50);
+        gr2.drawString(String.valueOf(mod.getHighScore()),100,70);
+    }
     private void drawNextPiece(Graphics2D g2,int x, int y){
         TetrominoClass next = mod.getNextTetromino();
         if(next!=null){

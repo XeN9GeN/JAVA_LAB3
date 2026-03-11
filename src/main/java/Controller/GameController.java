@@ -35,7 +35,7 @@ public class GameController{
 
         timer=new Timer(600,e -> {
             model.gameTick();
-            view.repaint();
+            view.repaint();//Swing вызывает метод paintComponent(Graphics gr)
             panel.repaint();
         });
         timer.start();

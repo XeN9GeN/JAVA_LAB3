@@ -1,6 +1,9 @@
 package Model;
 import Extra.*;
 import Factory.TetrisFactory;
+
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import javax.swing.*;
 
@@ -25,6 +28,7 @@ public class GameModel {
         score_calc = new ScoreCalc();
         random = new Random();
         spawnNewTet();
+        high_score.loadHighScore();
     }
     public TetrominoClass createRandomPiece() {
         String r_type = TETROMINO_TYPES[random.nextInt(TETROMINO_TYPES.length)];
@@ -69,6 +73,7 @@ public class GameModel {
         if(state==GameState.END){
             if(score>high_score.getHigh_score()){
                 high_score.setHigh_score(score);
+                high_score.saveHighScore();
             }
             JOptionPane.showMessageDialog(null, "GAME OVER\nYOUR SCORE: "
                     + high_score.getHigh_score(),"GAME OVER",JOptionPane.INFORMATION_MESSAGE);
@@ -94,6 +99,7 @@ public class GameModel {
                 score+=score_calc.calcScore(l);
                 if(score>high_score.getHigh_score()){
                     high_score.setHigh_score(score);
+                    high_score.saveHighScore();
                 }
             }
             spawnNewTet();
@@ -123,4 +129,5 @@ public class GameModel {
     public int getScore() {
         return score;
     }
+    public int getHighScore() { return high_score.getHigh_score();}
 }
