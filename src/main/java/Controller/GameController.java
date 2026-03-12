@@ -32,18 +32,25 @@ public class GameController{
     private void setupFrame(){
         JFrame frame = new JFrame("Tetris");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        int cellSize = 30;
+        int boardWidth = BoardClass.WIDTH * cellSize;
+        int boardHeight = BoardClass.HEIGHT * cellSize;
+        int infoWidth = 250;
+        int totalWidth = boardWidth + infoWidth;
+        int totalHeight = boardHeight;
+
 
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 20 + 100, BoardClass.HEIGHT * 20));
+        layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 50 + 100, BoardClass.HEIGHT * 50));
 
         //игра
         JPanel main_game_panel = new JPanel(new BorderLayout());
-        main_game_panel.setBounds(0,0,layeredPane.getPreferredSize().width,layeredPane.getPreferredSize().height);
+        main_game_panel.setBounds(0,0,totalWidth,totalHeight);
         main_game_panel.add(view_panel,BorderLayout.CENTER);//читать опиcание, поле в центре
         main_game_panel.add(info_panel,BorderLayout.EAST);
 
         //меню поверх
-        menu_panel.setBounds(0, 0, layeredPane.getPreferredSize().width, layeredPane.getPreferredSize().height);
+        menu_panel.setBounds(0, 0, totalWidth,totalHeight);
         menu_panel.setVisible(false);
 
         //все слои для frame
@@ -56,10 +63,14 @@ public class GameController{
         frame.pack();//както автоматически задаёт размер окна?
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);//show window(true)
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
         frame.revalidate();//пересчитать размеры и позиции после .add
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//иначе просто скроет, не закроет
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.frame=frame;
     }
-    private void setupKey() {
+    private synchronized void setupKey() {
         frame.addKeyListener(new KeyAdapter() {
 
             @Override
@@ -75,6 +86,9 @@ public class GameController{
                     timer.start();
                     menu_panel.setVisible(false);
                 }
+                view_panel.repaint();
+                info_panel.repaint();
+                menu_panel.repaint();
 
                 if (game_model.getState() == GameState.PLAY) {
                     switch (k.getKeyCode()) {
@@ -83,15 +97,17 @@ public class GameController{
                         case KeyEvent.VK_DOWN -> game_model.moveDown();
                         case KeyEvent.VK_UP -> game_model.rotateInGame();
                     }
+                    view_panel.repaint();
+                    info_panel.repaint();
                 }
 
-                view_panel.repaint();
-                info_panel.repaint();
-                menu_panel.repaint();
             }
         });
     }
-    private void startGame(){
+    private synchronized void startGame(){
+        if(game_model.getState()!=GameState.PLAY){
+            game_model.pause();
+        }
         timer = new Timer(600, e->{
             if(game_model.getState()==GameState.PLAY){
                 game_model.gameTick();
