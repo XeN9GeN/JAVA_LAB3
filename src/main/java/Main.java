@@ -2,6 +2,7 @@ import Controller.GameController;
 import View.GamePanel;
 import Model.*;
 import View.InfoPanel;
+import View.MenuPanel;
 
 import javax.swing.*;
 import java.io.*;
@@ -20,7 +21,8 @@ public class Main {
             GameModel gm = new GameModel();
             GamePanel gp= new GamePanel(gm);
             InfoPanel ip = new InfoPanel(gm);
-            GameController gc = new GameController(gm,gp,ip);
+            MenuPanel mp = new MenuPanel(gm);
+            GameController gc = new GameController(gm,gp,ip,mp);
         });
     }
 }

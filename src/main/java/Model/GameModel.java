@@ -114,6 +114,13 @@ public class GameModel {
         cur_tetromino=null;
         spawnNewTet();
     }
+    public synchronized void pause(){
+        if (state == GameState.PLAY) {
+            state = GameState.PAUSE;
+        } else if (state == GameState.PAUSE) {
+            state = GameState.PLAY;
+        }
+    }
 
 
     //Get
@@ -130,4 +137,7 @@ public class GameModel {
         return score;
     }
     public int getHighScore() { return high_score.getHigh_score();}
+    public GameState getState(){
+        return state;
+    }
 }

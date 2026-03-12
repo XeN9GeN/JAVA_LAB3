@@ -2,6 +2,7 @@ package Controller;
 import Model.*;
 import View.GamePanel;
 import View.InfoPanel;
+import View.MenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,49 +10,95 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class GameController{
-    private GameModel model;
-    private GamePanel view;
-    private InfoPanel panel;
+    private GameModel game_model;
+    private GamePanel view_panel;
+    private InfoPanel info_panel;
+    private MenuPanel menu_panel;
     private Timer timer;//javax.swing
+    private JFrame frame;
+    private JLayeredPane layeredPane;
 
-    public GameController(GameModel m, GamePanel v, InfoPanel i){
-        this.model=m;
-        this.view=v;
-        this.panel=i;
 
+    public GameController(GameModel gm, GamePanel gp, InfoPanel ip,MenuPanel mp) {
+        this.game_model = gm;
+        this.view_panel = gp;
+        this.info_panel = ip;
+        this.menu_panel = mp;
+
+        setupFrame();
+        setupKey();
+        startGame();
+    }
+    private void setupFrame(){
         JFrame frame = new JFrame("Tetris");
-        JPanel main_panel = new JPanel(new BorderLayout());
-        main_panel.add(view,BorderLayout.CENTER);//читать описание, поле в центре
-        main_panel.add(panel,BorderLayout.EAST);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.add(main_panel);//добавляет компоненту в конец Container(класс с компонентами)List в ContentPane посредством перегруженного
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 20 + 100, BoardClass.HEIGHT * 20));
+
+        //игра
+        JPanel main_game_panel = new JPanel(new BorderLayout());
+        main_game_panel.setBounds(0,0,layeredPane.getPreferredSize().width,layeredPane.getPreferredSize().height);
+        main_game_panel.add(view_panel,BorderLayout.CENTER);//читать опиcание, поле в центре
+        main_game_panel.add(info_panel,BorderLayout.EAST);
+
+        //меню поверх
+        menu_panel.setBounds(0, 0, layeredPane.getPreferredSize().width, layeredPane.getPreferredSize().height);
+        menu_panel.setVisible(false);
+
+        //все слои для frame
+        layeredPane.add(main_game_panel,JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(menu_panel,JLayeredPane.POPUP_LAYER);
+
+
+        frame.add(layeredPane);//добавляет компоненту в конец Container(класс с компонентами)List в ContentPane посредством перегруженного
         //в JFrame метода addImpl и перенаправления компоненты туда
         frame.pack();//както автоматически задаёт размер окна?
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);//show window(true)
         frame.revalidate();//пересчитать размеры и позиции после .add
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//иначе просто скроет, не закроет
-        setup(frame);
-
-        timer=new Timer(600,e -> {
-            model.gameTick();
-            view.repaint();//Swing вызывает метод paintComponent(Graphics gr)
-            panel.repaint();
-        });
-        timer.start();
     }
-    private void setup(JFrame frame){
+    private void setupKey() {
         frame.addKeyListener(new KeyAdapter() {
+
             @Override
-            public void keyPressed(KeyEvent k){
-                switch (k.getKeyCode()){
-                    case KeyEvent.VK_LEFT -> model.moveLeft();
-                    case KeyEvent.VK_RIGHT -> model.moveRight();
-                    case KeyEvent.VK_DOWN -> model.moveDown();
-                    case KeyEvent.VK_UP -> model.rotateInGame();
+            public void keyPressed(KeyEvent k) {
+                if (k.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    if (game_model.getState() == GameState.PLAY) {
+                        game_model.pause();
+                        timer.stop();
+                        menu_panel.setVisible(true);
+                    }
+                } else if (game_model.getState() == GameState.PAUSE) {
+                    game_model.pause();
+                    timer.start();
+                    menu_panel.setVisible(false);
                 }
-                view.repaint();
+
+                if (game_model.getState() == GameState.PLAY) {
+                    switch (k.getKeyCode()) {
+                        case KeyEvent.VK_LEFT -> game_model.moveLeft();
+                        case KeyEvent.VK_RIGHT -> game_model.moveRight();
+                        case KeyEvent.VK_DOWN -> game_model.moveDown();
+                        case KeyEvent.VK_UP -> game_model.rotateInGame();
+                    }
+                }
+
+                view_panel.repaint();
+                info_panel.repaint();
+                menu_panel.repaint();
             }
         });
+    }
+    private void startGame(){
+        timer = new Timer(600, e->{
+            if(game_model.getState()==GameState.PLAY){
+                game_model.gameTick();
+                view_panel.repaint();
+                info_panel.repaint();
+            }
+        });
+        timer.start();
     }
 }
