@@ -87,9 +87,9 @@ public class GameController{
                     return;
                 }
                 if(k.getKeyCode()==KeyEvent.VK_ENTER && player_panel.isVisible()){
-                    String name = player_panel.getPlayerName();
+                    String name = player_panel.getPlayerName();//(2)
                     if (!name.isEmpty()) {
-                        game_model.setCurrentPlayerName(name);
+                        game_model.setCurrentPlayerName(name);//(3)
                         player_panel.setVisible(false);
                         menu_panel.setVisible(true);
                     }

@@ -18,6 +18,6 @@ public class PlayerEntryPanel extends JPanel {
         this.add(name_field);
     }
     public String getPlayerName(){
-        return name_field.getText().trim();//Returns the text contained in this TextComponent.
+        return name_field.getText().trim();//(1)
     }
 }

@@ -78,7 +78,7 @@ public class GameModel {
     private void gameOver(){
         if(state==GameState.END){
             if(score>high_score.getHighScore()){
-                high_score.setHighScore(currentPlayerName, score);
+                high_score.setHighScore(currentPlayerName, score);//(4)
                 high_score.saveHighScore();
             }
             JOptionPane.showMessageDialog(null, "GAME OVER\nYOUR SCORE: "
@@ -104,7 +104,7 @@ public class GameModel {
             if(l>0){
                 score+=score_calc.calcScore(l);
                 if(score>high_score.getHighScore()){
-                    high_score.setHighScore(currentPlayerName, score);
+                    high_score.setHighScore(currentPlayerName, score);//(5)
                     high_score.saveHighScore();
                 }
             }
@@ -146,10 +146,7 @@ public class GameModel {
     public GameState getState(){
         return state;
     }
-    public void setCurrentPlayerName(String currentPlayerName) {
+    public void setCurrentPlayerName(String currentPlayerName) {//(3)
         this.currentPlayerName = currentPlayerName;
-    }
-    public String getCurrentPlayerName() {
-        return currentPlayerName;
     }
 }
