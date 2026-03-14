@@ -80,19 +80,24 @@ public class GameController{
 
             @Override
             public void keyPressed(KeyEvent k) {
+                if (player_panel.isVisible()) {
+                    if (k.getKeyCode() == KeyEvent.VK_ENTER) {
+                        String name = player_panel.getPlayerName();
+                        if (!name.isEmpty()) {
+                            game_model.setCurrentPlayerName(name);
+                            player_panel.setVisible(false);
+                            menu_panel.setVisible(true);
+                        }
+                    }
+                    frame.repaint();
+                }
+
                 if(k.getKeyCode()==KeyEvent.VK_F1) {
                     game_model.reset();
                     menu_panel.setVisible(false);
                     timer.start();
+                    frame.repaint();
                     return;
-                }
-                if(k.getKeyCode()==KeyEvent.VK_ENTER && player_panel.isVisible()){
-                    String name = player_panel.getPlayerName();//(2)
-                    if (!name.isEmpty()) {
-                        game_model.setCurrentPlayerName(name);//(3)
-                        player_panel.setVisible(false);
-                        menu_panel.setVisible(true);
-                    }
                 }
 
                 if (k.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -100,11 +105,13 @@ public class GameController{
                         game_model.pause();
                         timer.stop();
                         pause_panel.setVisible(true);
+                    } else if (game_model.getState() == GameState.PAUSE) {
+                        game_model.pause();
+                        timer.start();
+                        pause_panel.setVisible(false);
                     }
-                } else if (game_model.getState() == GameState.PAUSE) {
-                    game_model.pause();
-                    timer.start();
-                    pause_panel.setVisible(false);
+                    frame.repaint();
+                    return;
                 }
 
                 if (game_model.getState() == GameState.PLAY) {
@@ -114,8 +121,8 @@ public class GameController{
                         case KeyEvent.VK_DOWN -> game_model.moveDown();
                         case KeyEvent.VK_UP -> game_model.rotateInGame();
                     }
+                    frame.repaint();
                 }
-                frame.repaint();
             }
         });
     }
