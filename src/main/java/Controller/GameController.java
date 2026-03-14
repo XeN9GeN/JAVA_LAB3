@@ -7,22 +7,23 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class GameController{
-    private GameModel game_model;
-    private GamePanel view_panel;
-    private InfoPanel info_panel;
-    private PausePanel pause_panel;
-    private MenuPanel menu_panel;
+    private final GameModel game_model;
+    private final GamePanel view_panel;
+    private final InfoPanel info_panel;
+    private final PausePanel pause_panel;
+    private final MenuPanel menu_panel;
+    private final PlayerEntryPanel player_panel;
     private Timer timer;//javax.swing
     private JFrame frame;
-    private JLayeredPane layeredPane;
 
 
-    public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel pp,MenuPanel mp) {
+    public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel pp, MenuPanel mp, PlayerEntryPanel pep) {
         this.game_model = gm;
         this.view_panel = gp;
         this.info_panel = ip;
         this.pause_panel = pp;
         this.menu_panel = mp;
+        player_panel = pep;
 
         setupFrame();
         setupKey();
@@ -33,13 +34,12 @@ public class GameController{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         int cellSize = 30;
         int boardWidth = BoardClass.WIDTH * cellSize;
-        int boardHeight = BoardClass.HEIGHT * cellSize;
+        int totalHeight = BoardClass.HEIGHT * cellSize;
         int infoWidth = 250;
         int totalWidth = boardWidth + infoWidth;
-        int totalHeight = boardHeight;
 
 
-        layeredPane = new JLayeredPane();
+        JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 45 + 100, BoardClass.HEIGHT * 30));
 
         //игра
@@ -51,15 +51,17 @@ public class GameController{
         //меню поверх
         pause_panel.setBounds(0, 0, totalWidth,totalHeight);
         pause_panel.setVisible(false);
-
         menu_panel.setBounds(0, 0, totalWidth,totalHeight);
-        menu_panel.setVisible(true);
+        menu_panel.setVisible(false);
+        player_panel.setBounds(0,0,totalWidth,totalHeight);
+        player_panel.setVisible(true);
 
-        //все слои для frame
+
+        //все слои для frame(main_game_panel + pause/menu
         layeredPane.add(main_game_panel,JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(pause_panel,JLayeredPane.POPUP_LAYER);
         layeredPane.add(menu_panel, JLayeredPane.MODAL_LAYER);
-
+        layeredPane.add(player_panel,JLayeredPane.DRAG_LAYER);
 
         frame.add(layeredPane);//добавляет компоненту в конец Container(класс с компонентами)List в ContentPane посредством перегруженного
         //в JFrame метода addImpl и перенаправления компоненты туда
@@ -83,6 +85,14 @@ public class GameController{
                     menu_panel.setVisible(false);
                     timer.start();
                     return;
+                }
+                if(k.getKeyCode()==KeyEvent.VK_ENTER && player_panel.isVisible()){
+                    String name = player_panel.getPlayerName();
+                    if (!name.isEmpty()) {
+                        game_model.setCurrentPlayerName(name);
+                        player_panel.setVisible(false);
+                        menu_panel.setVisible(true);
+                    }
                 }
 
                 if (k.getKeyCode() == KeyEvent.VK_ESCAPE) {

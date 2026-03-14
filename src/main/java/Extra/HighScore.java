@@ -1,52 +1,50 @@
 package Extra;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class HighScore {
     private int high_score;
     private static final String FILENAME = "high_score.txt";
-    private Map<String,Integer> scores;
+    private final Map<String,Integer> scores_table;
 
     public HighScore() throws Exception {
+        scores_table = new java.util.HashMap<>();
         loadHighScore();
     }
-    public int getHigh_score() {
+    public int getHighScore() {
         return high_score;
     }
-    public void setHigh_score(int high_score) {
-        this.high_score = high_score;
-        saveHighScore();
+    public void setHighScore(String n, int s) {
+        int current_high = scores_table.getOrDefault(n, 0);
+        if(s>current_high){
+            scores_table.put(n,current_high);
+            saveHighScore();
+        }
     }
 
 
     public void loadHighScore() throws Exception{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILENAME), "Windows-1251"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILENAME)));
         String line;
-
-        while((line = reader.readLine())!=null){
-            line=line.trim();
-            String[] args = line.split("=");
+        while((line=reader.readLine())!=null){
+            line.trim();
+            String[] args = line.split(("="));
             String name = args[0];
-            String sc=args[1];
-            scores.put(name,Integer.getInteger(sc));
-        }
-
-    }
-
-
-
-
-        public void saveHighScore(){
-        try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter
-                (new FileOutputStream(FILENAME),Charset.forName("Windows-1251")))){
-
-            writer.write(String.valueOf(high_score));
-
-        }catch (IOException e) {
-            e.printStackTrace();
+            String score = args[1];
+            scores_table.put(name,Integer.parseInt(score));
         }
     }
-
+    public void saveHighScore() {
+        try (PrintWriter writer = new PrintWriter(FILENAME, StandardCharsets.UTF_8)) {
+            for (Map.Entry<String, Integer> w : scores_table.entrySet()) {
+                String name = w.getKey();
+                Integer score = w.getValue();
+                writer.println(name + "=" + score);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

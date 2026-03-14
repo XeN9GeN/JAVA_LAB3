@@ -1,9 +1,6 @@
 import Controller.GameController;
-import View.GamePanel;
+import View.*;
 import Model.*;
-import View.InfoPanel;
-import View.MenuPanel;
-import View.PausePanel;
 
 import javax.swing.*;
 import java.io.*;
@@ -24,7 +21,8 @@ public class Main {
             InfoPanel ip = new InfoPanel(gm);
             PausePanel pp = new PausePanel(gm);
             MenuPanel mp = new MenuPanel(gm);
-            GameController gc = new GameController(gm,gp,ip,pp,mp);
+            PlayerEntryPanel pep = new PlayerEntryPanel(gm);
+            GameController gc = new GameController(gm,gp,ip,pp,mp,pep);
         });
     }
 }
