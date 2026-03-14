@@ -106,7 +106,7 @@ public class GameModel {
             if(state==GameState.END) gameOver();
         }
     }
-    private synchronized void reset(){
+    public synchronized void reset(){
         board= new BoardClass();
         state=GameState.PLAY;
         score=0;
