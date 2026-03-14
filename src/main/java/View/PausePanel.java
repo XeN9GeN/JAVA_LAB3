@@ -5,10 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 import static javax.swing.UIManager.getColor;
 
-public class MenuPanel extends JPanel{
+public class PausePanel extends JPanel{
     private GameModel mod;
 
-    public MenuPanel(GameModel m){
+    public PausePanel(GameModel m){
         this.mod=m;
         setPreferredSize(new Dimension(200, BoardClass.HEIGHT *20));
         setBackground(new Color(0, 0, 0, 180));

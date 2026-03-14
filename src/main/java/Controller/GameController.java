@@ -1,9 +1,6 @@
 package Controller;
 import Model.*;
-import View.GamePanel;
-import View.InfoPanel;
-import View.MenuPanel;
-
+import View.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -13,17 +10,18 @@ public class GameController{
     private GameModel game_model;
     private GamePanel view_panel;
     private InfoPanel info_panel;
+    private PausePanel pause_panel;
     private MenuPanel menu_panel;
     private Timer timer;//javax.swing
     private JFrame frame;
     private JLayeredPane layeredPane;
 
 
-    public GameController(GameModel gm, GamePanel gp, InfoPanel ip,MenuPanel mp) {
+    public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel mp) {
         this.game_model = gm;
         this.view_panel = gp;
         this.info_panel = ip;
-        this.menu_panel = mp;
+        this.pause_panel = mp;
 
         setupFrame();
         setupKey();
@@ -41,7 +39,7 @@ public class GameController{
 
 
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 50 + 100, BoardClass.HEIGHT * 50));
+        layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 50 + 100, BoardClass.HEIGHT * 30));
 
         //игра
         JPanel main_game_panel = new JPanel(new BorderLayout());
@@ -50,12 +48,15 @@ public class GameController{
         main_game_panel.add(info_panel,BorderLayout.EAST);
 
         //меню поверх
+        pause_panel.setBounds(0, 0, totalWidth,totalHeight);
+        pause_panel.setVisible(false);
+
         menu_panel.setBounds(0, 0, totalWidth,totalHeight);
         menu_panel.setVisible(false);
 
         //все слои для frame
         layeredPane.add(main_game_panel,JLayeredPane.DEFAULT_LAYER);
-        layeredPane.add(menu_panel,JLayeredPane.POPUP_LAYER);
+        layeredPane.add(pause_panel,JLayeredPane.POPUP_LAYER);
 
 
         frame.add(layeredPane);//добавляет компоненту в конец Container(класс с компонентами)List в ContentPane посредством перегруженного
@@ -79,16 +80,16 @@ public class GameController{
                     if (game_model.getState() == GameState.PLAY) {
                         game_model.pause();
                         timer.stop();
-                        menu_panel.setVisible(true);
+                        pause_panel.setVisible(true);
                     }
                 } else if (game_model.getState() == GameState.PAUSE) {
                     game_model.pause();
                     timer.start();
-                    menu_panel.setVisible(false);
+                    pause_panel.setVisible(false);
                 }
                 view_panel.repaint();
                 info_panel.repaint();
-                menu_panel.repaint();
+                pause_panel.repaint();
 
                 if (game_model.getState() == GameState.PLAY) {
                     switch (k.getKeyCode()) {
@@ -96,6 +97,7 @@ public class GameController{
                         case KeyEvent.VK_RIGHT -> game_model.moveRight();
                         case KeyEvent.VK_DOWN -> game_model.moveDown();
                         case KeyEvent.VK_UP -> game_model.rotateInGame();
+                        case KeyEvent.VK_F1 -> game_model.reset();
                     }
                     view_panel.repaint();
                     info_panel.repaint();
