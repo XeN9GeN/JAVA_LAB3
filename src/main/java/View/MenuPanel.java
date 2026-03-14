@@ -10,7 +10,7 @@ public class MenuPanel extends JPanel {
     private GameModel mod;
 
     public MenuPanel(GameModel m){
-        this.mod=mod;
+        this.mod=m;
         setPreferredSize(new Dimension(250, BoardClass.HEIGHT * 30));
         setBackground(Color.GRAY);
     }

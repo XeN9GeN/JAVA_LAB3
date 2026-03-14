@@ -17,11 +17,12 @@ public class GameController{
     private JLayeredPane layeredPane;
 
 
-    public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel mp) {
+    public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel pp,MenuPanel mp) {
         this.game_model = gm;
         this.view_panel = gp;
         this.info_panel = ip;
-        this.pause_panel = mp;
+        this.pause_panel = pp;
+        this.menu_panel = mp;
 
         setupFrame();
         setupKey();
@@ -52,11 +53,12 @@ public class GameController{
         pause_panel.setVisible(false);
 
         menu_panel.setBounds(0, 0, totalWidth,totalHeight);
-        menu_panel.setVisible(false);
+        menu_panel.setVisible(true);
 
         //все слои для frame
         layeredPane.add(main_game_panel,JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(pause_panel,JLayeredPane.POPUP_LAYER);
+        layeredPane.add(menu_panel, JLayeredPane.MODAL_LAYER);
 
 
         frame.add(layeredPane);//добавляет компоненту в конец Container(класс с компонентами)List в ContentPane посредством перегруженного
@@ -76,6 +78,13 @@ public class GameController{
 
             @Override
             public void keyPressed(KeyEvent k) {
+                if(k.getKeyCode()==KeyEvent.VK_F1) {
+                    game_model.reset();
+                    menu_panel.setVisible(false);
+                    timer.start();
+                    return;
+                }
+
                 if (k.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     if (game_model.getState() == GameState.PLAY) {
                         game_model.pause();
@@ -87,9 +96,6 @@ public class GameController{
                     timer.start();
                     pause_panel.setVisible(false);
                 }
-                view_panel.repaint();
-                info_panel.repaint();
-                pause_panel.repaint();
 
                 if (game_model.getState() == GameState.PLAY) {
                     switch (k.getKeyCode()) {
@@ -97,12 +103,9 @@ public class GameController{
                         case KeyEvent.VK_RIGHT -> game_model.moveRight();
                         case KeyEvent.VK_DOWN -> game_model.moveDown();
                         case KeyEvent.VK_UP -> game_model.rotateInGame();
-                        case KeyEvent.VK_F1 -> game_model.reset();
                     }
-                    view_panel.repaint();
-                    info_panel.repaint();
                 }
-
+                frame.repaint();
             }
         });
     }
