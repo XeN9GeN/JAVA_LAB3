@@ -47,6 +47,8 @@ public class GamePanel extends JPanel{
                     gr.setColor(getColor(t.getColor()));
                     gr.fillRect(x,y,CELL,CELL);
                 }
+                gr.setColor(Color.DARK_GRAY);
+                gr.drawRect((t.getX()+j)*CELL,(t.getY()+i)*CELL,CELL,CELL);
             }
         }
     }

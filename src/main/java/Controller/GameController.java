@@ -40,7 +40,7 @@ public class GameController{
 
 
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 50 + 100, BoardClass.HEIGHT * 30));
+        layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 45 + 100, BoardClass.HEIGHT * 30));
 
         //игра
         JPanel main_game_panel = new JPanel(new BorderLayout());

@@ -37,7 +37,7 @@ public class PausePanel extends JPanel{
             g2d.drawString(scoreText, x, y);
 
             g2d.setFont(new Font("Arial", Font.PLAIN, 16));
-            String hintText = "Press ESC to continue"; fm = g2d.getFontMetrics(); x = (getWidth() - fm.stringWidth(hintText)) / 2;
+            String hintText = "Press Any other button to continue"; fm = g2d.getFontMetrics(); x = (getWidth() - fm.stringWidth(hintText)) / 2;
             y = getHeight() / 2 + 60;
             g2d.drawString(hintText, x, y);
 
