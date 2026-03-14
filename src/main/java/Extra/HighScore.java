@@ -2,12 +2,14 @@ package Extra;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 public class HighScore {
     private int high_score;
     private static final String FILENAME = "high_score.txt";
+    private Map<String,Integer> scores;
 
-    public HighScore(){
+    public HighScore() throws Exception {
         loadHighScore();
     }
     public int getHigh_score() {
@@ -18,21 +20,25 @@ public class HighScore {
         saveHighScore();
     }
 
-    public void loadHighScore(){
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader
-                (new FileInputStream(FILENAME),Charset.forName("Windows-1251")))){
 
-            String line = reader.readLine();
-            if(line!=null){
-                this.high_score=Integer.parseInt(line.trim());
-            }
+    public void loadHighScore() throws Exception{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILENAME), "Windows-1251"));
+        String line;
 
-        } catch (IOException | NumberFormatException e) {
-            System.err.println("Ошибка при загрузке рекорда: " + e.getMessage());
-            this.high_score = 0;
+        while((line = reader.readLine())!=null){
+            line=line.trim();
+            String[] args = line.split("=");
+            String name = args[0];
+            String sc=args[1];
+            scores.put(name,Integer.getInteger(sc));
         }
+
     }
-    public void saveHighScore(){
+
+
+
+
+        public void saveHighScore(){
         try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter
                 (new FileOutputStream(FILENAME),Charset.forName("Windows-1251")))){
 

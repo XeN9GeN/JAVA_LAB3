@@ -24,11 +24,19 @@ public class GameModel {
         board = new BoardClass();
         state = GameState.PLAY;
         score = 0;
-        high_score = new HighScore();
         score_calc = new ScoreCalc();
         random = new Random();
         spawnNewTet();
-        high_score.loadHighScore();
+        try {
+            high_score = new HighScore();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            high_score.loadHighScore();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     public TetrominoClass createRandomPiece() {
         String r_type = TETROMINO_TYPES[random.nextInt(TETROMINO_TYPES.length)];
