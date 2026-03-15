@@ -30,11 +30,6 @@ public class GameModel {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        try {
-            high_score.loadHighScore();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
     public TetrominoClass createRandomPiece() {
         String r_type = TETROMINO_TYPES[random.nextInt(TETROMINO_TYPES.length)];

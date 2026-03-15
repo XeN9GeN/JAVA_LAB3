@@ -63,6 +63,7 @@ public class GameController{
         layeredPane.add(menu_panel, JLayeredPane.MODAL_LAYER);
         layeredPane.add(player_panel,JLayeredPane.DRAG_LAYER);
 
+
         frame.add(layeredPane);//добавляет компоненту в конец Container(класс с компонентами)List в ContentPane посредством перегруженного
         //в JFrame метода addImpl и перенаправления компоненты туда
         frame.pack();//както автоматически задаёт размер окна?
@@ -74,23 +75,35 @@ public class GameController{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.frame=frame;
+        player_panel.getNameField().addActionListener(e -> {//атоматом подразумевает нажатие enter как авто генерация
+            //и ActionEvent и вызывает все зарегистрированные ActionListener
+            String name = player_panel.getPlayerName();
+            if(!name.isEmpty()){
+                game_model.setCurrentPlayerName(name);
+                player_panel.setVisible(false);
+                menu_panel.setVisible(true);
+                frame.repaint();
+            }
+        });
     }
     private synchronized void setupKey() {
         frame.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent k) {
-                if (player_panel.isVisible()) {
-                    if (k.getKeyCode() == KeyEvent.VK_ENTER) {
-                        String name = player_panel.getPlayerName();
-                        if (!name.isEmpty()) {
-                            game_model.setCurrentPlayerName(name);
-                            player_panel.setVisible(false);
-                            menu_panel.setVisible(true);
-                        }
-                    }
-                    frame.repaint();
-                }
+//                if (player_panel.isVisible()) {
+                    //KeyListener не получает события клавиш, когда фокус находится на JTextField во время ввода имени игрока
+                    //поэтому нажатие enter физически не работает в данных if'ах
+//                    if (k.getKeyCode() == KeyEvent.VK_ENTER) {
+//                        String name = player_panel.getPlayerName();
+//                        if (!name.isEmpty()) {
+//                            game_model.setCurrentPlayerName(name);
+//                            player_panel.setVisible(false);
+//                            menu_panel.setVisible(true);
+//                        }
+//                    }
+//                    frame.repaint();
+//                }
 
                 if(k.getKeyCode()==KeyEvent.VK_F1) {
                     game_model.reset();

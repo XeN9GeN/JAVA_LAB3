@@ -18,7 +18,7 @@ public class HighScore {
         return high_score_global;
     }
     public void setHighScore(String n, int s) {
-        int current_high = scores_table.getOrDefault(n, 0);
+        int current_high = scores_table.getOrDefault(n, 0);//только от игрока
 
         if(s>current_high){
             scores_table.put(n,s);
