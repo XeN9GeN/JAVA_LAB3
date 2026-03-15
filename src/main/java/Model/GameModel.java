@@ -72,10 +72,9 @@ public class GameModel {
     }
     private void gameOver(){
         if(state==GameState.END){
-            if(score>high_score.getHighScore()){
-                high_score.setHighScore(currentPlayerName, score);//(4)
-                high_score.saveHighScore();
-            }
+            high_score.setHighScore(currentPlayerName, score);
+            high_score.saveHighScore();
+
             JOptionPane.showMessageDialog(null, "GAME OVER\nYOUR SCORE: "
                     + high_score.getHighScore(),"GAME OVER",JOptionPane.INFORMATION_MESSAGE);
             reset();
