@@ -28,6 +28,9 @@ public class HighScore {
     }
 
     public void setHighScore(String n, int s) {
+        if (n == null || n.trim().isEmpty()) return;
+        if (s < 0) return;
+
         int current_high = scores_table.getOrDefault(n, 0);
 
         if(s > current_high){
@@ -39,6 +42,7 @@ public class HighScore {
 
     public void loadHighScore() throws Exception{
         File file = new File(FILENAME);
+        if(!file.exists()) return;
 
         BufferedReader reader = null;
         try{
@@ -51,8 +55,15 @@ public class HighScore {
 
                 String[] args = line.split("=");
                 if (args.length == 2) {
+
                     String name = args[0].trim();
                     String s = args[1].trim();
+
+                    if(Integer.parseInt(s)<0) {
+                        int j=Integer.parseInt(s);
+                        j=0;
+                        s=String.valueOf(j);
+                    }
 
                     try {
                         scores_table.put(name, Integer.parseInt(s));

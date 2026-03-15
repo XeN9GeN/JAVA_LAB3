@@ -8,6 +8,9 @@ public  class TetrominoClass {
 
 
     public TetrominoClass(int[][] shape, int color, String t) {
+        if(shape == null) throw new  IllegalArgumentException("Shape cannot be null");
+        if(color <= 0) throw new IllegalArgumentException("Color must be positive");
+        
         this.tetromino = shape;
         this.color = color;
         this.x = 4;

@@ -11,7 +11,6 @@ public class Main {
     public static void main(String[] args) {
         if (args.length > 0) {
             String h_score_file = args[0];
-            // You could set this as a system property or pass to HighScore
             System.setProperty("high_score.txt", h_score_file);
         }
 

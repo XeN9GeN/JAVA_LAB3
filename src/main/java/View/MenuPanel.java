@@ -23,15 +23,15 @@ public class MenuPanel extends JPanel {
 
         gr2.setColor(Color.WHITE);
         gr2.setFont(new Font("Arial", Font.BOLD, 24));
-        gr2.drawString("TETRIS MENU", 200, 100);
+        gr2.drawString("TETRIS MENU", 300, 100);
 
         gr2.setFont(new Font("Arial", Font.PLAIN, 16));
-        gr2.drawString("Press F1 to Start", 220, 200);
-        gr2.drawString("Press ESC to Resume", 200, 230);
+        gr2.drawString("Press F1 to Start", 320, 200);
+        gr2.drawString("Press ESC to Resume", 300, 230);
 
-        gr2.setFont(new Font("Arial", Font.BOLD, 14));
-        gr2.drawString("BEST SCORE:", 230, 400);
+        gr2.setFont(new Font("Arial", Font.BOLD, 15));
+        gr2.drawString("BEST SCORE:", 330, 400);
         gr2.setColor(Color.YELLOW);
-        gr2.drawString(String.valueOf(mod.getHighScoreGlobal()), 260, 425);
+        gr2.drawString(String.valueOf(mod.getHighScoreGlobal()), 365, 425);
     }
 }

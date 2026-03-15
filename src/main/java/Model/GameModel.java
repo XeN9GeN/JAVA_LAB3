@@ -40,8 +40,16 @@ public class GameModel {
 
     //Tetromino Actions
     public synchronized void moveCurTet(int dx, int dy) {
-        if (state == GameState.PLAY && cur_tetromino.canMove(board, dx, dy)) {
-            cur_tetromino.move(dx, dy);
+        if(state==null) throw new IllegalStateException("Game state is null");
+
+        if (state == GameState.PLAY) {
+            try {
+                if (cur_tetromino.canMove(board, dx, dy)) {
+                    cur_tetromino.move(dx, dy);
+                }
+            } catch (Exception e) {
+                System.err.println("Error moving tetromino: " + e.getMessage());
+            }
         }
     }
     public synchronized void rotateCurTet() {

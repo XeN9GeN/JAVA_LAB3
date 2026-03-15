@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 
 public class GameController{
     private final GameModel game_model;
-    private final GamePanel view_panel;
+    private final GamePanel game_panel;
     private final InfoPanel info_panel;
     private final PausePanel pause_panel;
     private final MenuPanel menu_panel;
@@ -21,12 +21,12 @@ public class GameController{
     public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel pp, MenuPanel mp, PlayerEntryPanel pep,
                           ScorePanel sp) {
         this.game_model = gm;
-        this.view_panel = gp;
+        this.game_panel = gp;
         this.info_panel = ip;
         this.pause_panel = pp;
         this.menu_panel = mp;
         this.score_panel = sp;
-        player_panel = pep;
+        this.player_panel = pep;
 
         setupFrame();
         setupKey();
@@ -35,22 +35,27 @@ public class GameController{
     private void setupFrame(){
         JFrame frame = new JFrame("Tetris");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         int cellSize = 30;
         int boardWidth = BoardClass.WIDTH * cellSize;
-        int totalHeight = BoardClass.HEIGHT * cellSize;
         int infoWidth = 250;
-        int totalWidth = boardWidth + infoWidth;
+        int scoreWidth = 150;
+        int totalWidth = boardWidth + infoWidth + scoreWidth+100;
+        int totalHeight = BoardClass.HEIGHT * cellSize;
 
 
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 45 + 100, BoardClass.HEIGHT * 30));
+        layeredPane.setPreferredSize(new Dimension(totalWidth, totalHeight));
+
 
         //игра
         JPanel main_game_panel = new JPanel(new BorderLayout());
         main_game_panel.setBounds(0,0,totalWidth,totalHeight);
-        main_game_panel.add(view_panel,BorderLayout.CENTER);//читать опиcание, поле в центре
+
+        main_game_panel.add(game_panel,BorderLayout.CENTER);//читать опиcание, поле в центре
         main_game_panel.add(info_panel,BorderLayout.EAST);
         main_game_panel.add(score_panel,BorderLayout.WEST);
+
 
         //меню поверх
         pause_panel.setBounds(0, 0, totalWidth,totalHeight);
@@ -77,6 +82,7 @@ public class GameController{
         frame.requestFocusInWindow();
         frame.revalidate();//пересчитать размеры и позиции после .add
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
         this.frame=frame;
         player_panel.getNameField().addActionListener(e -> {//атоматом подразумевает нажатие enter как авто генерация
@@ -147,10 +153,11 @@ public class GameController{
         if(game_model.getState()!=GameState.PLAY){
             game_model.pause();
         }
+
         timer = new Timer(600, e->{
             if(game_model.getState()==GameState.PLAY){
                 game_model.gameTick();
-                view_panel.repaint();
+                game_panel.repaint();
                 info_panel.repaint();
             }
         });
