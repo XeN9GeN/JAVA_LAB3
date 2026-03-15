@@ -23,6 +23,9 @@ public class HighScore {
     public int getPlayerHighScore(String name) {
         return scores_table.getOrDefault(name, 0);
     }
+    public Map<String, Integer> getScoresTable() {
+        return scores_table;
+    }
 
     public void setHighScore(String n, int s) {
         int current_high = scores_table.getOrDefault(n, 0);

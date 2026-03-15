@@ -1,4 +1,5 @@
 import Controller.GameController;
+import Extra.HighScore;
 import View.*;
 import Model.*;
 
@@ -15,13 +16,15 @@ public class Main {
         }
 
         SwingUtilities.invokeLater(()->{
+
             GameModel gm = new GameModel();
             GamePanel gp= new GamePanel(gm);
             InfoPanel ip = new InfoPanel(gm);
             PausePanel pp = new PausePanel(gm);
             MenuPanel mp = new MenuPanel(gm);
             PlayerEntryPanel pep = new PlayerEntryPanel(gm);
-            GameController gc = new GameController(gm,gp,ip,pp,mp,pep);
+            ScorePanel sp = new ScorePanel(gm);
+            GameController gc = new GameController(gm,gp,ip,pp,mp,pep,sp);
         });
     }
 }

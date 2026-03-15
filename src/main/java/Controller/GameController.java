@@ -13,16 +13,19 @@ public class GameController{
     private final PausePanel pause_panel;
     private final MenuPanel menu_panel;
     private final PlayerEntryPanel player_panel;
+    private final ScorePanel score_panel;
     private Timer timer;//javax.swing
     private JFrame frame;
 
 
-    public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel pp, MenuPanel mp, PlayerEntryPanel pep) {
+    public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel pp, MenuPanel mp, PlayerEntryPanel pep,
+                          ScorePanel sp) {
         this.game_model = gm;
         this.view_panel = gp;
         this.info_panel = ip;
         this.pause_panel = pp;
         this.menu_panel = mp;
+        this.score_panel = sp;
         player_panel = pep;
 
         setupFrame();
@@ -47,6 +50,7 @@ public class GameController{
         main_game_panel.setBounds(0,0,totalWidth,totalHeight);
         main_game_panel.add(view_panel,BorderLayout.CENTER);//читать опиcание, поле в центре
         main_game_panel.add(info_panel,BorderLayout.EAST);
+        main_game_panel.add(score_panel,BorderLayout.WEST);
 
         //меню поверх
         pause_panel.setBounds(0, 0, totalWidth,totalHeight);

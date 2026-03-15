@@ -144,6 +144,12 @@ public class GameModel {
     public GameState getState(){
         return state;
     }
+    public String getCurrentPlayerName() {
+        return currentPlayerName;
+    }
+    public HighScore getHighScore() {
+        return high_score;
+    }
 
     public void setCurrentPlayerName(String name) {
         this.currentPlayerName = name;
