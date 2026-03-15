@@ -5,25 +5,38 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class HighScore {
-    private int high_score_global;
     private static final String FILENAME = "high_score.txt";
     private final Map<String,Integer> scores_table;
+
+    private int high_score_global;
+    private int high_score_cur_player;
+    private String current_player_name;
+
 
     public HighScore() throws Exception {
         scores_table = new java.util.HashMap<>();
         loadHighScore();
     }
 
-    public int getHighScore() {
+
+    public int getHighScoreGLobal() {
         return high_score_global;
     }
+    public int getCurPlayerHighScore(){return high_score_cur_player;}
+
+
     public void setHighScore(String n, int s) {
         //if cur=null -> cur=0
         int current_high = scores_table.getOrDefault(n, 0);//только от игрока
 
         if(s>current_high){
             scores_table.put(n,s);
-            if(s> high_score_global) high_score_global = s;
+
+            if(s> high_score_global)
+                high_score_global = s;
+            if (n.equals(current_player_name)) {
+                high_score_cur_player = s;
+            }
             saveHighScore();
         }
     }
@@ -62,7 +75,6 @@ public class HighScore {
             if(reader!=null) reader.close();
         }
     }
-
     public void saveHighScore() {
         try (PrintWriter writer = new PrintWriter(FILENAME, StandardCharsets.UTF_8)) {
             for (Map.Entry<String, Integer> w : scores_table.entrySet()) {

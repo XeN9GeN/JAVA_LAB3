@@ -32,6 +32,6 @@ public class MenuPanel extends JPanel {
         gr2.setFont(new Font("Arial", Font.BOLD, 14));
         gr2.drawString("BEST SCORE:", 230, 400);
         gr2.setColor(Color.YELLOW);
-        gr2.drawString(String.valueOf(mod.getHighScore()), 260, 425);
+        gr2.drawString(String.valueOf(mod.getHighScoreGlobal()), 260, 425);
     }
 }
