@@ -35,9 +35,10 @@ public class InfoPanel extends JPanel{
         drawSection(g2, "GLOBAL BEST", 20, 185, new Color(255, 100, 100));
         drawValue(g2, String.valueOf(mod.getHighScoreGlobal()), 20, 210, Color.WHITE);
 
+
         drawSeparator(g2, 20, 225, 240);
 
-        drawSection(g2, "NEXT PIECE", 20, 250, new Color(255, 165, 0));
+        drawSection(g2, "NEXT PIECE", 20, 250,new Color(255, 165, 0));
         drawNextPiece(g2, 50, 280);
 
         drawSeparator(g2, 13, 350, 260);
@@ -66,7 +67,7 @@ public class InfoPanel extends JPanel{
             }
         }
     }
-    
+
     private void drawSection(Graphics2D g2, String text, int x, int y, Color color) {
         g2.setColor(color);
         g2.setFont(new Font("Arial", Font.BOLD, 14));
@@ -89,5 +90,17 @@ public class InfoPanel extends JPanel{
         g2.setColor(Color.LIGHT_GRAY);
         g2.setFont(new Font("Arial", Font.PLAIN, 15));
         g2.drawString("- " + action, x + 50, y);
+    }
+    private Color getColor(int c) {
+        return switch (c) {
+            case 1 -> Color.CYAN;
+            case 2 -> Color.YELLOW;
+            case 3 -> Color.ORANGE;
+            case 4 -> Color.GREEN;
+            case 5 -> Color.RED;
+            case 6 -> Color.BLUE;
+            case 7 -> Color.MAGENTA;
+            default -> Color.GRAY;
+        };
     }
 }

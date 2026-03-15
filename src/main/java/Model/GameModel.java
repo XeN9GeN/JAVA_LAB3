@@ -24,12 +24,13 @@ public class GameModel {
         score = 0;
         score_calc = new ScoreCalc();
         random = new Random();
-        spawnNewTet();
+
         try {
             high_score = new HighScore();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        spawnNewTet();
     }
     public TetrominoClass createRandomPiece() {
         String r_type = TETROMINO_TYPES[random.nextInt(TETROMINO_TYPES.length)];
@@ -75,8 +76,11 @@ public class GameModel {
             high_score.setHighScore(currentPlayerName, score);
             high_score.saveHighScore();
 
-            JOptionPane.showMessageDialog(null, "GAME OVER\nYOUR SCORE: "
-                    + high_score.getHighScore(),"GAME OVER",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "GAME OVER\n\n" +
+                            "YOUR SCORE: " + score + "\n" +
+                            "YOUR BEST: " + getHighScorePlayer() + "\n" +
+                            "GLOBAL BEST: " + getHighScoreGlobal(),
+                        "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
             reset();
         }
     }
@@ -97,16 +101,14 @@ public class GameModel {
 
             if(l>0){
                 score+=score_calc.calcScore(l);
-                if(score>high_score.getHighScore()){
-                    high_score.setHighScore(currentPlayerName, score);//(5)
-                    high_score.saveHighScore();
-                }
+                high_score.setHighScore(currentPlayerName,score);
             }
             spawnNewTet();
             if(state==GameState.END) gameOver();
         }
     }
     public synchronized void reset(){
+        high_score.setHighScore(currentPlayerName, score);
         board= new BoardClass();
         state=GameState.PLAY;
         score=0;
@@ -133,14 +135,17 @@ public class GameModel {
     public BoardClass getBoard(){
         return board;
     }
+
     public int getScore() {
         return score;
     }
-    public int getHighScore() { return high_score.getHighScore();}
+    public int getHighScoreGlobal() { return high_score.getHighScoreGLobal();}
+    public int getHighScorePlayer(){ return high_score.getPlayerHighScore(currentPlayerName);}
     public GameState getState(){
         return state;
     }
-    public void setCurrentPlayerName(String currentPlayerName) {//(3)
-        this.currentPlayerName = currentPlayerName;
+
+    public void setCurrentPlayerName(String name) {
+        this.currentPlayerName = name;
     }
 }

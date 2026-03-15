@@ -12,15 +12,9 @@ public class BoardClass {
     public BoardClass(){
         board= new int[WIDTH][HEIGHT];
     }
-
-
     public int[][] getBoard() {
         return board;
     }
-    public void set_board(int[][] b) {
-        this.board = b;
-    }
-
 
     public boolean boardCanPlaceTet(int[][] tetromino, int corner_X, int corner_Y) {
     //corner_X имеется ввиду x коорда левого вверхнего угла

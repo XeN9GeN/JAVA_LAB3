@@ -9,8 +9,6 @@ public class HighScore {
     private final Map<String,Integer> scores_table;
 
     private int high_score_global;
-    private int high_score_cur_player;
-    private String current_player_name;
 
 
     public HighScore() throws Exception {
@@ -22,25 +20,19 @@ public class HighScore {
     public int getHighScoreGLobal() {
         return high_score_global;
     }
-    public int getCurPlayerHighScore(){return high_score_cur_player;}
-
+    public int getPlayerHighScore(String name) {
+        return scores_table.getOrDefault(name, 0);
+    }
 
     public void setHighScore(String n, int s) {
-        //if cur=null -> cur=0
-        int current_high = scores_table.getOrDefault(n, 0);//только от игрока
+        int current_high = scores_table.getOrDefault(n, 0);
 
-        if(s>current_high){
-            scores_table.put(n,s);
-
-            if(s> high_score_global)
-                high_score_global = s;
-            if (n.equals(current_player_name)) {
-                high_score_cur_player = s;
-            }
+        if(s > current_high){
+            scores_table.put(n, s);
+            if(s > high_score_global) high_score_global = s;
             saveHighScore();
         }
     }
-
 
     public void loadHighScore() throws Exception{
         File file = new File(FILENAME);
