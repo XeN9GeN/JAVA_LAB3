@@ -7,22 +7,23 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class GameController{
-    private GameModel game_model;
-    private GamePanel view_panel;
-    private InfoPanel info_panel;
-    private PausePanel pause_panel;
-    private MenuPanel menu_panel;
+    private final GameModel game_model;
+    private final GamePanel view_panel;
+    private final InfoPanel info_panel;
+    private final PausePanel pause_panel;
+    private final MenuPanel menu_panel;
+    private final PlayerEntryPanel player_panel;
     private Timer timer;//javax.swing
     private JFrame frame;
-    private JLayeredPane layeredPane;
 
 
-    public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel pp,MenuPanel mp) {
+    public GameController(GameModel gm, GamePanel gp, InfoPanel ip, PausePanel pp, MenuPanel mp, PlayerEntryPanel pep) {
         this.game_model = gm;
         this.view_panel = gp;
         this.info_panel = ip;
         this.pause_panel = pp;
         this.menu_panel = mp;
+        player_panel = pep;
 
         setupFrame();
         setupKey();
@@ -33,13 +34,12 @@ public class GameController{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         int cellSize = 30;
         int boardWidth = BoardClass.WIDTH * cellSize;
-        int boardHeight = BoardClass.HEIGHT * cellSize;
+        int totalHeight = BoardClass.HEIGHT * cellSize;
         int infoWidth = 250;
         int totalWidth = boardWidth + infoWidth;
-        int totalHeight = boardHeight;
 
 
-        layeredPane = new JLayeredPane();
+        JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(BoardClass.WIDTH * 45 + 100, BoardClass.HEIGHT * 30));
 
         //игра
@@ -51,14 +51,17 @@ public class GameController{
         //меню поверх
         pause_panel.setBounds(0, 0, totalWidth,totalHeight);
         pause_panel.setVisible(false);
-
         menu_panel.setBounds(0, 0, totalWidth,totalHeight);
-        menu_panel.setVisible(true);
+        menu_panel.setVisible(false);
+        player_panel.setBounds(0,0,totalWidth,totalHeight);
+        player_panel.setVisible(true);
 
-        //все слои для frame
+
+        //все слои для frame(main_game_panel + pause/menu
         layeredPane.add(main_game_panel,JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(pause_panel,JLayeredPane.POPUP_LAYER);
         layeredPane.add(menu_panel, JLayeredPane.MODAL_LAYER);
+        layeredPane.add(player_panel,JLayeredPane.DRAG_LAYER);
 
 
         frame.add(layeredPane);//добавляет компоненту в конец Container(класс с компонентами)List в ContentPane посредством перегруженного
@@ -72,16 +75,41 @@ public class GameController{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.frame=frame;
+        player_panel.getNameField().addActionListener(e -> {//атоматом подразумевает нажатие enter как авто генерация
+            //и ActionEvent и вызывает все зарегистрированные ActionListener
+            String name = player_panel.getPlayerName();
+            if(!name.isEmpty()){
+                game_model.setCurrentPlayerName(name);
+                player_panel.setVisible(false);
+                menu_panel.setVisible(true);
+                frame.repaint();
+            }
+        });
     }
     private synchronized void setupKey() {
         frame.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent k) {
+//                if (player_panel.isVisible()) {
+                    //KeyListener не получает события клавиш, когда фокус находится на JTextField во время ввода имени игрока
+                    //поэтому нажатие enter физически не работает в данных if'ах
+//                    if (k.getKeyCode() == KeyEvent.VK_ENTER) {
+//                        String name = player_panel.getPlayerName();
+//                        if (!name.isEmpty()) {
+//                            game_model.setCurrentPlayerName(name);
+//                            player_panel.setVisible(false);
+//                            menu_panel.setVisible(true);
+//                        }
+//                    }
+//                    frame.repaint();
+//                }
+
                 if(k.getKeyCode()==KeyEvent.VK_F1) {
                     game_model.reset();
                     menu_panel.setVisible(false);
                     timer.start();
+                    frame.repaint();
                     return;
                 }
 
@@ -90,11 +118,13 @@ public class GameController{
                         game_model.pause();
                         timer.stop();
                         pause_panel.setVisible(true);
+                    } else if (game_model.getState() == GameState.PAUSE) {
+                        game_model.pause();
+                        timer.start();
+                        pause_panel.setVisible(false);
                     }
-                } else if (game_model.getState() == GameState.PAUSE) {
-                    game_model.pause();
-                    timer.start();
-                    pause_panel.setVisible(false);
+                    frame.repaint();
+                    return;
                 }
 
                 if (game_model.getState() == GameState.PLAY) {
@@ -104,8 +134,8 @@ public class GameController{
                         case KeyEvent.VK_DOWN -> game_model.moveDown();
                         case KeyEvent.VK_UP -> game_model.rotateInGame();
                     }
+                    frame.repaint();
                 }
-                frame.repaint();
             }
         });
     }

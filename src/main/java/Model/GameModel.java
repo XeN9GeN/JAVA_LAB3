@@ -1,23 +1,21 @@
 package Model;
 import Extra.*;
 import Factory.TetrisFactory;
-
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import javax.swing.*;
 
 public class GameModel {
     private TetrominoClass next_tetromino;
     private TetrominoClass cur_tetromino;
-    private HighScore high_score;
-    private ScoreCalc score_calc;
+    private final HighScore high_score;
+    private final ScoreCalc score_calc;
     private BoardClass board;
     private GameState state;
-    private Random random;
+    private final Random random;
 
     private static final String[] TETROMINO_TYPES = {"I", "O", "L", "S", "Z", "J", "T"};
     private int score;
+    private String currentPlayerName;
 
     //Constructors
     public GameModel() {
@@ -29,11 +27,6 @@ public class GameModel {
         spawnNewTet();
         try {
             high_score = new HighScore();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            high_score.loadHighScore();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -79,12 +72,11 @@ public class GameModel {
     }
     private void gameOver(){
         if(state==GameState.END){
-            if(score>high_score.getHigh_score()){
-                high_score.setHigh_score(score);
-                high_score.saveHighScore();
-            }
+            high_score.setHighScore(currentPlayerName, score);
+            high_score.saveHighScore();
+
             JOptionPane.showMessageDialog(null, "GAME OVER\nYOUR SCORE: "
-                    + high_score.getHigh_score(),"GAME OVER",JOptionPane.INFORMATION_MESSAGE);
+                    + high_score.getHighScore(),"GAME OVER",JOptionPane.INFORMATION_MESSAGE);
             reset();
         }
     }
@@ -105,8 +97,8 @@ public class GameModel {
 
             if(l>0){
                 score+=score_calc.calcScore(l);
-                if(score>high_score.getHigh_score()){
-                    high_score.setHigh_score(score);
+                if(score>high_score.getHighScore()){
+                    high_score.setHighScore(currentPlayerName, score);//(5)
                     high_score.saveHighScore();
                 }
             }
@@ -144,8 +136,11 @@ public class GameModel {
     public int getScore() {
         return score;
     }
-    public int getHighScore() { return high_score.getHigh_score();}
+    public int getHighScore() { return high_score.getHighScore();}
     public GameState getState(){
         return state;
+    }
+    public void setCurrentPlayerName(String currentPlayerName) {//(3)
+        this.currentPlayerName = currentPlayerName;
     }
 }

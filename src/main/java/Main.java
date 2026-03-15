@@ -1,9 +1,6 @@
 import Controller.GameController;
-import View.GamePanel;
+import View.*;
 import Model.*;
-import View.InfoPanel;
-import View.MenuPanel;
-import View.PausePanel;
 
 import javax.swing.*;
 import java.io.*;
@@ -11,11 +8,10 @@ import java.nio.charset.Charset;
 
 public class Main {
     public static void main(String[] args) {
-        String h_score_file = args[0];
-        try(Reader reader = new InputStreamReader(new FileInputStream(h_score_file), Charset.forName("Windows-1251"))) {
-            int h_score=reader.read();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (args.length > 0) {
+            String h_score_file = args[0];
+            // You could set this as a system property or pass to HighScore
+            System.setProperty("high_score.txt", h_score_file);
         }
 
         SwingUtilities.invokeLater(()->{
@@ -24,7 +20,8 @@ public class Main {
             InfoPanel ip = new InfoPanel(gm);
             PausePanel pp = new PausePanel(gm);
             MenuPanel mp = new MenuPanel(gm);
-            GameController gc = new GameController(gm,gp,ip,pp,mp);
+            PlayerEntryPanel pep = new PlayerEntryPanel(gm);
+            GameController gc = new GameController(gm,gp,ip,pp,mp,pep);
         });
     }
 }

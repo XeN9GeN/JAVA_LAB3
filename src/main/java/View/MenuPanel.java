@@ -5,7 +5,6 @@ import Model.*;
 import javax.swing.*;
 import java.awt.*;
 
-import static javax.swing.UIManager.getColor;
 public class MenuPanel extends JPanel {
     private GameModel mod;
 

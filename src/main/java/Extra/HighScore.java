@@ -1,52 +1,77 @@
 package Extra;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class HighScore {
-    private int high_score;
+    private int high_score_global;
     private static final String FILENAME = "high_score.txt";
-    private Map<String,Integer> scores;
+    private final Map<String,Integer> scores_table;
 
     public HighScore() throws Exception {
+        scores_table = new java.util.HashMap<>();
         loadHighScore();
     }
-    public int getHigh_score() {
-        return high_score;
+
+    public int getHighScore() {
+        return high_score_global;
     }
-    public void setHigh_score(int high_score) {
-        this.high_score = high_score;
-        saveHighScore();
+    public void setHighScore(String n, int s) {
+        //if cur=null -> cur=0
+        int current_high = scores_table.getOrDefault(n, 0);//только от игрока
+
+        if(s>current_high){
+            scores_table.put(n,s);
+            if(s> high_score_global) high_score_global = s;
+            saveHighScore();
+        }
     }
 
 
     public void loadHighScore() throws Exception{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILENAME), "Windows-1251"));
-        String line;
+        File file = new File(FILENAME);
 
-        while((line = reader.readLine())!=null){
-            line=line.trim();
-            String[] args = line.split("=");
-            String name = args[0];
-            String sc=args[1];
-            scores.put(name,Integer.getInteger(sc));
+        BufferedReader reader = null;
+        try{
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            String line;
+
+            while ((line=reader.readLine())!=null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                String[] args = line.split("=");
+                if (args.length == 2) {
+                    String name = args[0].trim();
+                    String s = args[1].trim();
+
+                    try {
+                        scores_table.put(name, Integer.parseInt(s));
+                        if (Integer.parseInt(s) > high_score_global) {
+                            high_score_global = Integer.parseInt(s);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid score format: " + s);
+                    }
+                } else {
+                    System.err.println("Invalid line format: " + line);
+                }
+            }
+        }finally {
+            if(reader!=null) reader.close();
         }
-
     }
 
-
-
-
-        public void saveHighScore(){
-        try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter
-                (new FileOutputStream(FILENAME),Charset.forName("Windows-1251")))){
-
-            writer.write(String.valueOf(high_score));
-
-        }catch (IOException e) {
-            e.printStackTrace();
+    public void saveHighScore() {
+        try (PrintWriter writer = new PrintWriter(FILENAME, StandardCharsets.UTF_8)) {
+            for (Map.Entry<String, Integer> w : scores_table.entrySet()) {
+                String name = w.getKey();
+                Integer score = w.getValue();
+                writer.println(name + "=" + score);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
-
 }
