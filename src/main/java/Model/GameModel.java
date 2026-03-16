@@ -64,6 +64,25 @@ public class GameModel {
     public void rotateInGame() {
         rotateCurTet();
     }
+    public synchronized void harddrop(){
+        if(state!=GameState.PLAY) return;
+
+        while(cur_tetromino.canMove(board,0,1)){
+             moveDown();
+        }
+        board.placeTet(cur_tetromino);
+
+        int l = board.clearFullLines();
+        if(l>0){
+            score+= (int) (score_calc.calcScore(l)*1.5);
+            high_score.setHighScore(currentPlayerName,score);
+        }
+
+        spawnNewTet();
+        if (state == GameState.END) {
+            gameOver();
+        }
+    }
 
 
     //Game Actions
@@ -79,7 +98,7 @@ public class GameModel {
             state = GameState.END;
         }
     }
-    private void gameOver(){
+    public void gameOver(){
         if(state==GameState.END){
             high_score.setHighScore(currentPlayerName, score);
             high_score.saveHighScore();
@@ -143,7 +162,6 @@ public class GameModel {
     public BoardClass getBoard(){
         return board;
     }
-
     public int getScore() {
         return score;
     }
@@ -161,5 +179,9 @@ public class GameModel {
 
     public void setCurrentPlayerName(String name) {
         this.currentPlayerName = name;
+    }
+
+    public void setGameStateEnd() {
+        this.state=GameState.END;
     }
 }

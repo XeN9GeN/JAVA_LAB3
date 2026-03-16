@@ -143,6 +143,11 @@ public class GameController{
                         case KeyEvent.VK_RIGHT -> game_model.moveRight();
                         case KeyEvent.VK_DOWN -> game_model.moveDown();
                         case KeyEvent.VK_UP -> game_model.rotateInGame();
+                        case KeyEvent.VK_SPACE -> game_model.harddrop();
+                        case KeyEvent.VK_F2->{
+                                game_model.setGameStateEnd();
+                                game_model.gameOver();
+                        }
                     }
                     frame.repaint();
                 }

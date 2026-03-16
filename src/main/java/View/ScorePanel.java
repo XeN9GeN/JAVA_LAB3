@@ -39,7 +39,6 @@ public class ScorePanel extends JPanel {
         drawSeparator(g2, 20, 105, 210);
 
         //В мапе нет сортировки, пришлось идти окольными путями
-
         Set<Map.Entry<String,Integer>> map = mod.getHighScore().getScoresTable().entrySet();
         List<Map.Entry<String,Integer>> sortedScores = new ArrayList<>(map);
         sortedScores.sort((e1,e2)-> e2.getValue().compareTo(e1.getValue()));
@@ -69,7 +68,7 @@ public class ScorePanel extends JPanel {
 
             //имена в таблице
             g2.setColor(Color.WHITE);
-            g2.setFont(new Font("Arial", Font.PLAIN, 15));
+            g2.setFont(new Font("Arial", Font.PLAIN, 20));
             String name = entry.getKey();
             g2.drawString(name, 60, y);
             //счета в таблице
@@ -78,7 +77,7 @@ public class ScorePanel extends JPanel {
             } else {
                 g2.setColor(new Color(100, 255, 100));
             }
-            g2.setFont(new Font("Arial", Font.BOLD, 15));
+            g2.setFont(new Font("Arial", Font.BOLD, 20));
             g2.drawString(String.valueOf(entry.getValue()), 170, y);
 
             y += 25;

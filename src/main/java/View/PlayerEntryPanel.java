@@ -2,25 +2,49 @@ package View;
 
 import Model.GameModel;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PlayerEntryPanel extends JPanel {
-    private final JTextField name_field;//JTextField is a lightweight component that allows the editing of a single line of text
+    private final JTextField name_field;
     private final GameModel gameModel;
 
-    public PlayerEntryPanel(GameModel m) {
-        this.gameModel=m;
-        setLayout(new GridBagLayout());//сетчатая сумка
-        name_field = new JTextField(15);
-        JLabel label = new JLabel("Enter your name:");//A display area for a short text string or an image, or both.
+    // Константы для оформления (легко менять в одном месте)
+    private static final Color BACKGROUND_COLOR = new Color(44, 62, 80); // Темно-синий
+    private static final Color TEXT_COLOR = Color.WHITE;
+    private static final Font MAIN_FONT = new Font("Segoe UI", Font.BOLD, 20);
 
-        this.add(label);
-        this.add(name_field);
+    public PlayerEntryPanel(GameModel m) {
+        this.gameModel = m;
+
+        setLayout(new GridBagLayout());
+        setBackground(BACKGROUND_COLOR);
+        setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+
+        JLabel label = new JLabel("ENTER YOUR NAME:");
+        label.setFont(MAIN_FONT);
+        label.setForeground(TEXT_COLOR);
+        gbc.gridy = 0;
+        this.add(label, gbc);
+
+        name_field = new JTextField(15);
+        name_field.setFont(new Font("Monospaced", Font.PLAIN, 19));
+        name_field.setBackground(new Color(236, 240, 241));
+        name_field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(52, 152, 219), 2),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+
+        gbc.gridy = 1;
+        this.add(name_field, gbc);
     }
-    public String getPlayerName(){
-        return name_field.getText().trim();//(1)
+
+    public String getPlayerName() {
+        return name_field.getText().trim();
     }
 
     public JTextField getNameField() {
